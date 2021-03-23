@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      timeout: 20s
+      retries: 10
+  service-gateway:
+    restart: on-failure
+    build: service-gateway
+    ports:
+      - "8080:80"
+  service-authorization:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build: service-authorization
+  service-candidate:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build: service-candidate
+  service-party:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build: service-party
+  service-user:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+    build: service-user
+
+networks:
+  default:
+    external:
+      name: voting
