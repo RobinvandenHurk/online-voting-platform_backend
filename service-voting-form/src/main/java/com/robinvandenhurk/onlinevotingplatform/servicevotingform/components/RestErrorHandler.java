@@ -1,14 +1,18 @@
-package com.robinvandenhurk.onlinevotingplatform.servicecandidate.components;
+package com.robinvandenhurk.onlinevotingplatform.servicevotingform.components;
 
-
-import com.robinvandenhurk.onlinevotingplatform.servicecandidate.domain.http.response.HttpResponse;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.response.HttpResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.io.IOException;
+import java.io.PushbackInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,4 +38,17 @@ public class RestErrorHandler {
         return HttpResponse.createBadRequest("Invalid parameters received", errors);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFormatException.class)
+    public HttpResponse<?> handleValidationExceptions(InvalidFormatException ex) {
+        String path = ex.getPathReference();
+        String message = path.split("\\[")[1];
+        message = message.split("\\]")[0];
+        String variableName = message.replace("\"", "");
+
+        Map<String, String> errors = new HashMap<>();
+        errors.put(variableName, "Invalid format");
+
+        return HttpResponse.createBadRequest("Invalid parameters received", errors);
+    }
 }

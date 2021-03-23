@@ -50,7 +50,7 @@ public class HttpResponse<T extends HttpResponseData> extends ResponseEntity<T> 
         return new HttpResponse<>(HttpStatus.OK);
     }
 
-    public static HttpResponse<?> badRequest(String message, Map<String, String> data) {
+    public static HttpResponse<?> createBadRequest(String message, Map<String, String> data) {
         return new HttpResponse<>(new BadRequestResponseData(message, data), HttpStatus.BAD_REQUEST);
     }
 }

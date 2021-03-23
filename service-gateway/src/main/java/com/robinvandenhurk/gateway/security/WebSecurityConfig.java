@@ -2,6 +2,7 @@ package com.robinvandenhurk.gateway.security;
 
 import com.robinvandenhurk.gateway.security.filter.AddUserDetailHeadersFilter;
 import com.robinvandenhurk.gateway.security.filter.ErrorResponseFilter;
+import com.robinvandenhurk.gateway.security.filter.LoggingFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,6 +60,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ErrorResponseFilter errorResponseFilter() {
         return new ErrorResponseFilter();
+    }
+
+    @Bean
+    public LoggingFilter loggingFilter() {
+        return new LoggingFilter();
     }
 
 }

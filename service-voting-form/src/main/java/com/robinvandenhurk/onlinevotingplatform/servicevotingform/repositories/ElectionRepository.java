@@ -1,8 +1,10 @@
 package com.robinvandenhurk.onlinevotingplatform.servicevotingform.repositories;
 
-import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.Form;
+import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.Election;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * Author:    Robin van den Hurk
@@ -11,5 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface FormRepository extends JpaRepository<Form, Long> {
+public interface ElectionRepository extends JpaRepository<Election, Long> {
+    Optional<Election> findAllByName(String name);
 }

@@ -20,7 +20,7 @@ public class Party {
     private int id;
     @NotNull
     private String name;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Map<Integer, Candidate> members;
 
     public String getName() {
@@ -43,7 +43,7 @@ public class Party {
         return new HashMap<>(members);
     }
 
-    public void setMembers(HashMap<Integer, Candidate> members) {
+    public void setMembers(Map<Integer, Candidate> members) {
         this.members = members;
     }
 }

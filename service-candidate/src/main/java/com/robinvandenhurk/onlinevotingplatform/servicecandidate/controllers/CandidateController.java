@@ -52,7 +52,7 @@ public class CandidateController {
     }
 
     @PostMapping
-    public HttpResponse<CreateCandidateResponseData> createCandidate(@RequestBody @Validated CreateCandidateRequestData data) {
+    public HttpResponse<CreateCandidateResponseData> createCandidate(@RequestBody @Valid CreateCandidateRequestData data) {
         Candidate candidate = new Candidate();
         candidate.setFirstName(data.getFirstName());
         candidate.setLastName(data.getLastName());
