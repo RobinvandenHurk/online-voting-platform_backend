@@ -1,10 +1,10 @@
 package com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author:    Robin van den Hurk
@@ -16,12 +16,14 @@ import java.util.Map;
 public class Party {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @NotEmpty
     private String name;
+    @NotNull
+    private int number;
     @OneToMany(cascade = CascadeType.ALL)
-    private Map<Integer, Candidate> members;
+    private List<Candidate> members;
 
     public String getName() {
         return name;
@@ -31,19 +33,35 @@ public class Party {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Map<Integer, Candidate> getMembers() {
-        return new HashMap<>(members);
+    public int getNumber() {
+        return number;
     }
 
-    public void setMembers(Map<Integer, Candidate> members) {
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public List<Candidate> getMembers() {
+        return new ArrayList<>(members);
+    }
+
+    public void setMembers(List<Candidate> members) {
         this.members = members;
+    }
+
+    public void addMember(Candidate member) {
+        this.members.add(member);
+    }
+
+    public void removeMember(Candidate member) {
+        this.members.remove(member);
     }
 }

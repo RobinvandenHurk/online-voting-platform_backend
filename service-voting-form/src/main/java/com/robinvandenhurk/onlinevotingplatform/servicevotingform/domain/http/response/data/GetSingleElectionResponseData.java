@@ -3,10 +3,9 @@ package com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.r
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.Party;
 import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.response.HttpResponseData;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +16,9 @@ import java.util.Map;
 
 public class GetSingleElectionResponseData extends HttpResponseData {
 
+    private long id;
     private String name;
-    private Map<Integer, Party> parties;
+    private List<Party> parties;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date startDateTime;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
@@ -27,7 +27,8 @@ public class GetSingleElectionResponseData extends HttpResponseData {
     private Date createdAt;
     private long createdBy;
 
-    public GetSingleElectionResponseData(long id, String name, Map<Integer, Party> parties, Date startDateTime, Date endDateTime, Date createdAt, long createdBy) {
+    public GetSingleElectionResponseData(long id, String name, List<Party> parties, Date startDateTime, Date endDateTime, Date createdAt, long createdBy) {
+        this.id = id;
         this.name = name;
         this.parties = parties;
         this.startDateTime = startDateTime;
@@ -36,11 +37,15 @@ public class GetSingleElectionResponseData extends HttpResponseData {
         this.createdBy = createdBy;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public Map<Integer, Party> getParties() {
+    public List<Party> getParties() {
         return parties;
     }
 

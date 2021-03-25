@@ -1,15 +1,13 @@
 package com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Author:    Robin van den Hurk
@@ -21,12 +19,12 @@ import java.util.Map;
 public class Election {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotEmpty
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
-    private Map<Integer, Party> parties;
+    private List<Party> parties;
     @NotNull
     private Date startDateTime;
     @NotNull
@@ -84,11 +82,19 @@ public class Election {
         this.name = name;
     }
 
-    public Map<Integer, Party> getParties() {
+    public List<Party> getParties() {
         return parties;
     }
 
-    public void setParties(Map<Integer, Party> parties) {
+    public void setParties(List<Party> parties) {
         this.parties = parties;
+    }
+
+    public void addParty(Party party) {
+        this.parties.add(party);
+    }
+
+    public void removeParty(Party party) {
+        this.parties.remove(party);
     }
 }

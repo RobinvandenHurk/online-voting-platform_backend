@@ -5,11 +5,11 @@ import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.Candida
 import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.Party;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Author:    Robin van den Hurk
@@ -30,7 +30,8 @@ public class CreateElectionRequestData {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date endDateTime;
     @NotEmpty
-    private Map<Integer, CreateElectionRequestDataSubParty> parties;
+    @Valid
+    private List<CreateElectionRequestDataSubParty> parties;
 
     public Date getStartDateTime() {
         return startDateTime;
@@ -56,20 +57,31 @@ public class CreateElectionRequestData {
         this.name = name;
     }
 
-    public Map<Integer, CreateElectionRequestDataSubParty> getParties() {
+    public List<CreateElectionRequestDataSubParty> getParties() {
         return parties;
     }
 
-    public void setParties(Map<Integer, CreateElectionRequestDataSubParty> parties) {
+    public void setParties(List<CreateElectionRequestDataSubParty> parties) {
         this.parties = parties;
     }
 
     public static class CreateElectionRequestDataSubParty {
 
+        @Min(value = 1)
+        private int number;
         @NotEmpty
         private String name;
         @NotEmpty
-        private Map<Integer, CreateElectionRequestDataSubCandidate> members;
+        @Valid
+        private List<CreateElectionRequestDataSubCandidate> members;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public void setNumber(int number) {
+            this.number = number;
+        }
 
         public String getName() {
             return name;
@@ -79,20 +91,21 @@ public class CreateElectionRequestData {
             this.name = name;
         }
 
-        public Map<Integer, CreateElectionRequestDataSubCandidate> getMembers() {
+        public List<CreateElectionRequestDataSubCandidate> getMembers() {
             return members;
         }
 
-        public void setMembers(Map<Integer, CreateElectionRequestDataSubCandidate> members) {
+        public void setMembers(List<CreateElectionRequestDataSubCandidate> members) {
             this.members = members;
         }
 
         public Party getPartyEntity() {
             Party party = new Party();
-            Map<Integer, Candidate> candidates = new HashMap<>();
+            List<Candidate> candidates = new ArrayList<>();
 
-            getMembers().forEach((place, candidate) -> candidates.put(place, candidate.getCandidateEntity()));
+            getMembers().forEach(candidate -> candidates.add(candidate.getCandidateEntity()));
 
+            party.setNumber(number);
             party.setName(name);
             party.setMembers(candidates);
 
@@ -102,12 +115,22 @@ public class CreateElectionRequestData {
 
     public static class CreateElectionRequestDataSubCandidate {
 
+        @Min(value = 1)
+        private int number;
         @NotEmpty
         private String firstName;
         @NotEmpty
         private String lastName;
         @NotEmpty
         private String placeOfBirth;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public void setNumber(int number) {
+            this.number = number;
+        }
 
         public String getFirstName() {
             return firstName;
@@ -136,6 +159,7 @@ public class CreateElectionRequestData {
         public Candidate getCandidateEntity() {
             Candidate candidate = new Candidate();
 
+            candidate.setNumber(number);
             candidate.setFirstName(firstName);
             candidate.setLastName(lastName);
             candidate.setPlaceOfBirth(placeOfBirth);
