@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.robinvandenhurk.gateway.example</groupId>
 	<artifactId>service-user</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>service-user</name>
-	<description>Example User Service</description>
+	<description>User Service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
