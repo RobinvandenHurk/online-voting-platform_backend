@@ -33,28 +33,10 @@ import java.util.Optional;
 public class UserController {
 
     private UserRepository userRepository;
-    private AuthorityRepository authorityRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authorityRepository = authorityRepository;
-
-        if (userRepository.findByEmail("robin@robinhood.com") == null) {
-            // P@ssw0rd
-            String hash = "2355aa883ba9bab232c85dccc9f3dce6fe97b6c0a1a1531971fc105516653309ff6d2246dec6aad1ba08a77775c8c052b5715fa1f68a207143ef9dc664d10c6b";
-            List<Authority> authorities = new ArrayList<>();
-
-            authorities.add(authorityRepository.save(new Authority("UPDATE")));
-            authorities.add(authorityRepository.save(new Authority("READ")));
-            authorities.add(authorityRepository.save(new Authority("DELETE")));
-            authorities.add(authorityRepository.save(new Authority("CREATE")));
-            authorities.add(authorityRepository.save(new Authority("VIEW_USER_DATA")));
-
-            User user = new User("Robin", "Hood", "robin@robinhood.com", hash, true, authorities);
-
-            userRepository.save(user);
-        }
     }
 
     @GetMapping
