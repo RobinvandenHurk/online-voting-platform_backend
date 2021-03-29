@@ -13,5 +13,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./service-user/DockerFile
+          file: ./service-user/Dockerfile
           tags: latest
