@@ -12,5 +12,6 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
+          context: ./
           file: ./service-user/DockerFile
           tags: latest
