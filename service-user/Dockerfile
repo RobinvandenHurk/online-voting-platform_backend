@@ -2,8 +2,9 @@
 # Build stage
 #
 FROM maven:3.6.0-jdk-11-slim AS build
-COPY service-user/src /home/app/src
-COPY service-user/pom.xml /home/app
+COPY service-user /home/app/
+COPY lib /home/lib
+
 RUN mvn -f /home/app/pom.xml clean package
 
 #
