@@ -1,7 +1,4 @@
 name: Publish Docker image
-defaults:
-  run:
-    working-directory: service-user
 on:
   release:
     types: [published]
@@ -15,8 +12,9 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
+          context: ./service-user
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: RobinvandenHurk/online-voting-platform_backend/service-user
-          tag_with_ref: false
+          tags: latest
