@@ -3,6 +3,13 @@ package com.robinvandenhurk.gateway.example.serviceuser.domain.http.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data.BadRequestResponseData;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data.ConflictResponseData;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data.ForbiddenResponseData;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 /**
  * Author:    Robin van den Hurk
@@ -11,44 +18,59 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class HttpResponse {
-    private HttpResponseData data;
+public class HttpResponse<T extends HttpResponseData> extends ResponseEntity<T> {
     private String error;
-    private boolean success;
 
-    public HttpResponse(String error) {
-        this.success = false;
+    public HttpResponse(String error, HttpStatus statusCode) {
+        this(statusCode);
         this.error = error;
     }
 
     public HttpResponse() {
-        this.success = true;
+        this(HttpStatus.OK);
     }
 
-    public HttpResponse(HttpResponseData data) {
-        this.data = data;
-        this.success = true;
+    public HttpResponse(HttpStatus statusCode) {
+        super(statusCode);
+    }
+
+    public HttpResponse(T data) {
+        this(data, HttpStatus.OK);
+    }
+
+    public HttpResponse(T data, HttpStatus status) {
+        super(data, status);
     }
 
     public String getError() {
         return error;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public static HttpResponse<?> createNotFound() {
+        return new HttpResponse<>("Requested resource not found", HttpStatus.NOT_FOUND);
     }
 
-    public HttpResponseData getData() {
-        return data;
+    public static HttpResponse<?> createOK() {
+        return new HttpResponse<>(HttpStatus.OK);
     }
 
-    @Override
-    public String toString() {
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static HttpResponse<?> createBadRequest(String message, Map<String, String> data) {
+        return new HttpResponse<>(new BadRequestResponseData(message, data), HttpStatus.BAD_REQUEST);
+    }
+
+    public static HttpResponse<?> createBadRequest(String message) {
+        return new HttpResponse<>(new BadRequestResponseData(message), HttpStatus.BAD_REQUEST);
+    }
+
+    public static HttpResponse<?> createConflict(String message) {
+        return new HttpResponse<>(new ConflictResponseData(message), HttpStatus.CONFLICT);
+    }
+
+    public static HttpResponse<?> createForbidden() {
+        return createForbidden("You do not have access to this resource");
+    }
+
+    public static HttpResponse<?> createForbidden(String message) {
+        return new HttpResponse<>(new ForbiddenResponseData(message), HttpStatus.FORBIDDEN);
     }
 }

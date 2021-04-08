@@ -21,7 +21,6 @@ services:
       timeout: 30s
       retries: 3
   service-gateway:
-    restart: on-failure
     build: service-gateway
     ports:
       - "8080:80"
@@ -52,7 +51,6 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    restart: on-failure
     build: service-user
   service-voting-form:
     depends_on:
@@ -60,7 +58,6 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    restart: on-failure
     build: service-voting-form
 
 networks:

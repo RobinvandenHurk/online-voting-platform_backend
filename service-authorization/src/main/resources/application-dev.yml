@@ -1,0 +1,26 @@
+server:
+  port: 80
+spring:
+  jpa:
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://mysql:3306/ovp_authorization?createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+  rabbitmq:
+    host: rabbitmq
+    username: guest
+    password: guest
+    port: 5672
+    listener:
+      direct:
+        missing-queues-fatal: false
+      simple:
+        missing-queues-fatal: false
+    template:
+      retry:
+        max-attempts: 1

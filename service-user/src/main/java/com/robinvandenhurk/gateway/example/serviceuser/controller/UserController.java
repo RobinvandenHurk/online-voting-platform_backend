@@ -1,25 +1,20 @@
 package com.robinvandenhurk.gateway.example.serviceuser.controller;
 
-import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.Authority;
 import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.User;
-import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.GetCurrentUserData;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging.UserCreationMessage;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging.UserDeletionMessage;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.request.CreateUserRequest;
 import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.HttpResponse;
-import com.robinvandenhurk.gateway.example.serviceuser.repository.AuthorityRepository;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data.GetCurrentUserData;
+import com.robinvandenhurk.gateway.example.serviceuser.messaging.MessageSender;
 import com.robinvandenhurk.gateway.example.serviceuser.repository.UserRepository;
 import com.robinvandenhurk.gateway.library.userinjection.ForwardedHttpServletRequest;
 import com.robinvandenhurk.gateway.library.userinjection.annotation.AuthorityRequired;
-import com.robinvandenhurk.gateway.library.userinjection.annotation.AuthorityRequiredAspect;
 import com.robinvandenhurk.gateway.library.userinjection.principal.GatewayUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Optional;
 
 /**
@@ -33,25 +28,68 @@ import java.util.Optional;
 public class UserController {
 
     private UserRepository userRepository;
+    private MessageSender messageSender;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, MessageSender messageSender) {
         this.userRepository = userRepository;
+        this.messageSender = messageSender;
     }
 
     @GetMapping
-    @AuthorityRequired(authority = "VIEW_USER_DATA")
-    public ResponseEntity<HttpResponse> getCurrentUserData(ForwardedHttpServletRequest request) {
+    @AuthorityRequired(authority = "USER_SELF_VIEW_DATA")
+    public HttpResponse<?> getCurrentUserData(ForwardedHttpServletRequest request) {
         GatewayUserPrincipal gatewayUser = request.getUserPrincipal();
 
-        Optional<User> optionalUser = userRepository.findById(gatewayUser.getId());
+        Optional<User> optionalUser = userRepository.findById(Integer.toUnsignedLong(gatewayUser.getId()));
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return ResponseEntity.ok(new HttpResponse(new GetCurrentUserData(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail())));
+            return new HttpResponse<>(new GetCurrentUserData(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
         } else {
 //            We should never get here
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new HttpResponse(""));
+            return HttpResponse.createForbidden();
+        }
+    }
+
+    @PostMapping()
+    public HttpResponse<?> createUser(@RequestBody @Valid CreateUserRequest request) {
+//        Verify if email exists
+        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+
+        if (optionalUser.isEmpty()) {
+//            Create the user
+
+            User user = new User();
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+
+            user = userRepository.save(user);
+
+            messageSender.send(new UserCreationMessage(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), request.getPassword()));
+
+            return HttpResponse.createOK();
+        } else {
+            return HttpResponse.createConflict("User with email already exists");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @AuthorityRequired(authority = "USER_OTHER_DELETE")
+    public HttpResponse<?> deleteUser(@PathVariable Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            messageSender.send(new UserDeletionMessage(user.getId()));
+
+            userRepository.deleteById(user.getId());
+
+            return HttpResponse.createOK();
+        } else {
+            return HttpResponse.createNotFound();
         }
     }
 }
