@@ -1,6 +1,6 @@
-package com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data;
+package com.robinvandenhurk.gateway.example.serviceuser.domain.http.response;
 
-import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.HttpResponseData;
+import com.robinvandenhurk.gateway.library.userinjection.domain.http.response.HttpResponseData;
 
 /**
  * Author:    Robin van den Hurk

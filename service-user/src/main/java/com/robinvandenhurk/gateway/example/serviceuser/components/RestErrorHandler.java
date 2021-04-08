@@ -1,6 +1,6 @@
 package com.robinvandenhurk.gateway.example.serviceuser.components;
 
-import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.HttpResponse;
+import com.robinvandenhurk.gateway.library.userinjection.domain.http.response.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

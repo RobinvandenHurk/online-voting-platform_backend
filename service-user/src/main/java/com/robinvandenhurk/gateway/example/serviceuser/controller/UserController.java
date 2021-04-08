@@ -1,17 +1,22 @@
 package com.robinvandenhurk.gateway.example.serviceuser.controller;
 
 import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.User;
-import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging.UserCreationMessage;
-import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging.UserDeletionMessage;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.messaging.UserCreationMessage;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.messaging.UserDeletionMessage;
 import com.robinvandenhurk.gateway.example.serviceuser.domain.http.request.CreateUserRequest;
-import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.HttpResponse;
-import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.data.GetCurrentUserData;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.request.UpdateUserRequest;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.http.response.GetCurrentUserData;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.messaging.UserUpdatingMessage;
 import com.robinvandenhurk.gateway.example.serviceuser.messaging.MessageSender;
 import com.robinvandenhurk.gateway.example.serviceuser.repository.UserRepository;
 import com.robinvandenhurk.gateway.library.userinjection.ForwardedHttpServletRequest;
+import com.robinvandenhurk.gateway.library.userinjection.annotation.AuthenticationRequired;
 import com.robinvandenhurk.gateway.library.userinjection.annotation.AuthorityRequired;
+import com.robinvandenhurk.gateway.library.userinjection.domain.http.response.HttpResponse;
+import com.robinvandenhurk.gateway.library.userinjection.principal.AuthenticatedGatewayUserPrincipal;
 import com.robinvandenhurk.gateway.library.userinjection.principal.GatewayUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,22 +42,41 @@ public class UserController {
     }
 
     @GetMapping
-    @AuthorityRequired(authority = "USER_SELF_VIEW_DATA")
+    @AuthenticationRequired
     public HttpResponse<?> getCurrentUserData(ForwardedHttpServletRequest request) {
         GatewayUserPrincipal gatewayUser = request.getUserPrincipal();
 
-        Optional<User> optionalUser = userRepository.findById(Integer.toUnsignedLong(gatewayUser.getId()));
+        Optional<User> optionalUser = userRepository.findById(gatewayUser.getId());
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return new HttpResponse<>(new GetCurrentUserData(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+            return new HttpResponse(new GetCurrentUserData(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
         } else {
 //            We should never get here
             return HttpResponse.createForbidden();
         }
     }
 
-    @PostMapping()
+    @PutMapping
+    @AuthenticationRequired
+    public HttpResponse<?> updateUser(ForwardedHttpServletRequest request, @RequestBody @Valid UpdateUserRequest data) {
+        AuthenticatedGatewayUserPrincipal gatewayUser = (AuthenticatedGatewayUserPrincipal) request.getUserPrincipal();
+
+        User user = userRepository.findById(gatewayUser.getId()).get();
+
+        user.setFirstName(data.getFirstName());
+        user.setLastName(data.getLastName());
+        user.setEmail(data.getEmail());
+
+        user = userRepository.save(user);
+
+        messageSender.send(new UserUpdatingMessage(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail()));
+
+        return HttpResponse.createOK();
+    }
+
+
+    @PostMapping
     public HttpResponse<?> createUser(@RequestBody @Valid CreateUserRequest request) {
 //        Verify if email exists
         Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());

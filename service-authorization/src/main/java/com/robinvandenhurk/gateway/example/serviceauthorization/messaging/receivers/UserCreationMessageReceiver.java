@@ -52,8 +52,9 @@ public class UserCreationMessageReceiver {
     private List<Authority> getDefaultAuthorities() {
         List<Authority> authorities = new ArrayList<>();
         String[] authorityNames = {
-            "USER_SELF_VIEW_DATA",
-            "USER_OTHER_DELETE"
+                "USER_SELF_DETAILS_VIEW",
+                "USER_SELF_DETAILS_CHANGE",
+                "USER_OTHER_DELETE"
         };
 
         for (String authorityName : authorityNames) {

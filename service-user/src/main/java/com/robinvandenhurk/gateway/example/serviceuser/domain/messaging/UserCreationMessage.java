@@ -1,4 +1,4 @@
-package com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging;
+package com.robinvandenhurk.gateway.example.serviceuser.domain.messaging;
 
 /**
  * Author:    Robin van den Hurk

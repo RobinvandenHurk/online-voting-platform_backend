@@ -1,6 +1,6 @@
 package com.robinvandenhurk.gateway.example.serviceuser.messaging;
 
-import com.robinvandenhurk.gateway.example.serviceuser.domain.entity.messaging.Message;
+import com.robinvandenhurk.gateway.example.serviceuser.domain.messaging.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
