@@ -1,7 +1,7 @@
 name: service-user
 defaults:
   run:
-    working-directory: ${{ github.workflow }}
+    working-directory: ${{ GITHUB_WORKFLOW }}
 on:
   push:
     paths: service-user/**
