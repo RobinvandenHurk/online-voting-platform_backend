@@ -36,11 +36,6 @@ public class AuthenticationController {
         this.tokenProvider = new JwtProvider();
     }
 
-    @GetMapping
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("This works!");
-    }
-
     /*
      This method validates the provided credentials and, when successful, returns a JWT Token
      */
