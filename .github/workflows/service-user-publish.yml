@@ -3,7 +3,7 @@ env:
   service: service-user
 on:
   push:
-#    paths: service-user/**
+   paths: service-user/**
 jobs:
   push_to_registry:
     runs-on: ubuntu-latest
