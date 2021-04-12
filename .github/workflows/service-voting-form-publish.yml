@@ -1,9 +1,9 @@
-name: Push service-voting-form to Docker Hub
+name: Push voting-form to Docker Hub
 env:
-  service: service-voting-form
+  service: voting-form
 on:
   push:
-   paths: service-voting-form/**
+   paths: voting-form/**
 jobs:
   push_to_registry:
     runs-on: ubuntu-latest
