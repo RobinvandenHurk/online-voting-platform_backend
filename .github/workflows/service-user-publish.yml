@@ -1,9 +1,7 @@
-name: Publish Docker image
-env:
-  service: service-user
+name: service-user
 defaults:
   run:
-    working-directory: ${{ env.service }}
+    working-directory: ${{ github.workflow }}
 on:
   push:
     paths: service-user/**
