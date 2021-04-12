@@ -25,6 +25,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Maven
+        working-directory: ${{ env.service }}
         run: mvn clean package -P prod
       - name: Build and push
         id: docker_build
