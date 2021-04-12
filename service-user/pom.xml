@@ -74,6 +74,7 @@
 				<active.profile>dev</active.profile>
 			</properties>
 		</profile>
+		
 		<profile>
 			<id>prod</id>
 			<properties>
