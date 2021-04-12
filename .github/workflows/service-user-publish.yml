@@ -6,7 +6,7 @@ defaults:
     working-directory: ${{ env.service }}
 on:
   push:
-    paths: ./${{ env.service }}
+    paths: ${{ env.service }}
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
