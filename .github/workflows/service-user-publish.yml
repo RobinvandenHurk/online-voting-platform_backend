@@ -1,7 +1,9 @@
-name: service-user
+name: Push service-user to Docker Hub
+env:
+  service: service-user
 defaults:
   run:
-    working-directory: ${{ GITHUB_WORKFLOW }}
+    working-directory: service-user
 on:
   push:
     paths: service-user/**
