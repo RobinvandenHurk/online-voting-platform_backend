@@ -3,7 +3,7 @@ env:
   service: service-user
 on:
   push:
-    paths: service-user/**
+#    paths: service-user/**
 jobs:
   push_to_registry:
     runs-on: ubuntu-latest
@@ -21,8 +21,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ${{ env.service }}
+          context: ./${{ env.service }}
           push: true
-          tags: robinvandenhurk/${{ env.service }}:latest
+          tags: robinvandenhurk/vote-${{ env.service }}:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
