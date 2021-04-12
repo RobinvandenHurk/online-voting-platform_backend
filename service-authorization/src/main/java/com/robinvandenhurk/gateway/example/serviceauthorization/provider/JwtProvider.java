@@ -1,7 +1,7 @@
 package com.robinvandenhurk.gateway.example.serviceauthorization.provider;
 
 import com.robinvandenhurk.gateway.example.serviceauthorization.domain.entity.Authority;
-import com.robinvandenhurk.gateway.example.serviceauthorization.domain.entity.User;
+import com.robinvandenhurk.gateway.example.serviceauthorization.domain.entity.Credentials;
 import io.jsonwebtoken.*;
 
 import java.util.Date;
@@ -29,12 +29,12 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(User user) {
+    public String generateToken(Credentials credentials) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", user.getEmail());
-        claims.put("authorities", user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList()));
+        claims.put("email", credentials.getEmail());
+        claims.put("authorities", credentials.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList()));
 
-        return createToken(claims, Integer.toString(user.getId()));
+        return createToken(claims, Long.toString(credentials.getUserId()));
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

@@ -1,10 +1,12 @@
 name: Publish Service-User Docker image
+env:
+  service: service-user
+defaults:
+  run:
+    working-directory: ${{ env.service }}
 on:
-  release:
-    types: [published]
   push:
-    branches: 
-    - main
+    paths: ${{ env.service }}/**
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
@@ -19,6 +21,7 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ./service-user/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: robinvandenhurk/vote-${{ env.service }}
           tags: latest

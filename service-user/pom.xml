@@ -40,7 +40,17 @@
 		<dependency>
 			<groupId>com.robinvandenhurk.gateway.library</groupId>
 			<artifactId>library-user-injection</artifactId>
-			<version>1.0</version>
+			<version>0.3.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -52,7 +62,24 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
 	</build>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<active.profile>dev</active.profile>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>prod</id>
+			<properties>
+				<active.profile>prod</active.profile>
+			</properties>
+		</profile>
+	</profiles>
 </project>

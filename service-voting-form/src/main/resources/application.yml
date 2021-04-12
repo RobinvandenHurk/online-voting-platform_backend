@@ -6,7 +6,15 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://mysql:3306/onlinevotingplatform_election?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql:3306/ovp_election?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: password
+  rabbitmq:
+    host: rabbitmq
+    password: guest
+    port: 15672
+    username: guest
+    exchange: user.exchange
+    queue: user.queue
+    routingkey: user.routingkey

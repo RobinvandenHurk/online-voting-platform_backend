@@ -4,6 +4,7 @@ package com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.r
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.response.data.BadRequestResponseData;
 import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.response.data.ConflictResponseData;
+import com.robinvandenhurk.onlinevotingplatform.servicevotingform.domain.http.response.data.ForbiddenResponseData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -62,5 +63,13 @@ public class HttpResponse<T extends HttpResponseData> extends ResponseEntity<T> 
 
     public static HttpResponse<?> createConflict(String message) {
         return new HttpResponse<>(new ConflictResponseData(message), HttpStatus.CONFLICT);
+    }
+
+    public static HttpResponse<?> createForbidden() {
+        return createForbidden("You do not have access to this resource");
+    }
+
+    public static HttpResponse<?> createForbidden(String message) {
+        return new HttpResponse<>(new ForbiddenResponseData(message), HttpStatus.FORBIDDEN);
     }
 }

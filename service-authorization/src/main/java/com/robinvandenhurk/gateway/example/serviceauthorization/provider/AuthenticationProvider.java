@@ -1,7 +1,7 @@
 package com.robinvandenhurk.gateway.example.serviceauthorization.provider;
 
-import com.robinvandenhurk.gateway.example.serviceauthorization.domain.entity.User;
-import com.robinvandenhurk.gateway.example.serviceauthorization.repository.UserRepository;
+import com.robinvandenhurk.gateway.example.serviceauthorization.domain.entity.Credentials;
+import com.robinvandenhurk.gateway.example.serviceauthorization.repository.CredentialsRepository;
 
 /**
  * Author:    Robin van den Hurk
@@ -11,15 +11,15 @@ import com.robinvandenhurk.gateway.example.serviceauthorization.repository.UserR
 
 public class AuthenticationProvider {
 
-    public boolean authenticate(UserRepository repository, String email, String password) {
+    public boolean authenticate(CredentialsRepository repository, String email, String password) {
         boolean authenticated = false;
-        User user = repository.findByEmail(email);
+        Credentials credentials = repository.findByEmail(email);
 
-        if (user != null) {
+        if (credentials != null) {
 //            User exists
-            if (user.getPasswordHash().equals(new HashProvider().pbkdf2(password))) {
+            if (credentials.getPasswordHash().equals(new HashProvider().pbkdf2(password))) {
 //                Passwords match
-                if (user.isEnabled()) {
+                if (credentials.isEnabled()) {
 //                    User is enabled
                     authenticated = true;
                 }

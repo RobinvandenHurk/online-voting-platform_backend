@@ -6,7 +6,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://mysql:3306/onlinevotingplatform_candidate?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql:3306/ovp_candidate?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: password

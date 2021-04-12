@@ -1,7 +1,9 @@
 package com.robinvandenhurk.gateway.example.serviceuser.domain.entity;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Author:    Robin van den Hurk
@@ -13,53 +15,46 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private String passwordHash;
-    private boolean isEnabled;
-    @OneToMany
-    private List<Authority> authorities;
 
-    public User(String firstName, String lastName, String email, String passwordHash, boolean isEnabled, List<Authority> authorities) {
+    public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.passwordHash = passwordHash;
-        this.isEnabled = isEnabled;
-        this.authorities = authorities;
     }
 
     public User() {
         super();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public List<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

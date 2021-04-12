@@ -62,7 +62,6 @@ public class ElectionController {
         } else {
             return HttpResponse.createNotFound();
         }
-
     }
 
     //    @AuthorityRequired(authority = "VOTE_CREATE_FORM")

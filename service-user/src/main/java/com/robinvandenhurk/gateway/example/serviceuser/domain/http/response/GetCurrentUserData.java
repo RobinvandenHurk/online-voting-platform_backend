@@ -1,5 +1,7 @@
 package com.robinvandenhurk.gateway.example.serviceuser.domain.http.response;
 
+import com.robinvandenhurk.gateway.library.userinjection.domain.http.response.HttpResponseData;
+
 /**
  * Author:    Robin van den Hurk
  * Date:      15/03/2021
@@ -8,19 +10,19 @@ package com.robinvandenhurk.gateway.example.serviceuser.domain.http.response;
 
 public class GetCurrentUserData extends HttpResponseData {
 
-    private int id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
 
-    public GetCurrentUserData(int id, String firstName, String lastName, String email) {
+    public GetCurrentUserData(Long id, String firstName, String lastName, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
