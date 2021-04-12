@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Service-User Docker image
 env:
   service: service-user
 defaults:
@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+      - name: 'Create settings.xml'
+        uses: whelk-io/maven-settings-xml-action@v4
+        with:
+          servers: '[{"id": "github", "username": "${{ secrets.GITHUB_USERNAME }}", "password": "${{ secrets.GITHUB_PASSWORD }}"}]'
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
