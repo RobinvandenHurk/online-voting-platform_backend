@@ -1,0 +1,23 @@
+server:
+  port: 80
+zuul:
+  routes:
+    auth:
+      path: /auth/**
+      url: http://service-authorization/auth
+    user:
+      path: /user/**
+      url: http://service-user/user
+    voting-form:
+      path: /voting-form/**
+      url: http://service-voting-form/voting-form
+    candidate:
+      path: /candidate/**
+      url: http://service-candidate/candidate
+    party:
+      path: /party/**
+      url: http://service-party/party
+services:
+  authorization:
+    host: service-authorization
+    port: 80

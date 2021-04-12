@@ -2,11 +2,10 @@ server:
   port: 80
 spring:
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://mysql:3306/ovp_candidate?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysql:3306/ovp_party?createDatabaseIfNotExist=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: password
