@@ -36,8 +36,13 @@ public class AuthenticationController {
         this.tokenProvider = new JwtProvider();
     }
 
+    @GetMapping
+    private String version() {
+        return "0.1";
+    }
+
     /*
-     This method validates the provided credentials and, when successful, returns a JWT Token
+     This method validates the provided credentials and, when successful, returns a JWT
      */
     @PostMapping
     public ResponseEntity<HttpResponse> getToken(@RequestBody @Validated TokenRequest data) {
