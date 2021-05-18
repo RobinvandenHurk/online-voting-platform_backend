@@ -75,7 +75,6 @@ public class UserController {
         return HttpResponse.createOK();
     }
 
-
     @PostMapping
     public HttpResponse<?> createUser(@RequestBody @Valid CreateUserRequest request) {
 //        Verify if email exists
@@ -85,6 +84,12 @@ public class UserController {
 //            Create the user
 
             User user = new User();
+            // TODO: Improve this. Probably the worst method to do this :)
+            for (long i = 1L; user.getId() == null; i++) {
+                if (!userRepository.existsById(i)) {
+                    user.setId(i);
+                }
+            }
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
             user.setEmail(request.getEmail());

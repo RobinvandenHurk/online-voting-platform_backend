@@ -5,13 +5,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-  datasource:
-    url: jdbc:mysql://mysql:3306/ovp_user?createDatabaseIfNotExist=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: password
   rabbitmq:
     host: rabbitmq
     password: guest
     port: 5672
     username: guest
+  data:
+    mongodb:
+      host: mongo
