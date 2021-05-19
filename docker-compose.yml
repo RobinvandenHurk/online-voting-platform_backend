@@ -1,5 +1,19 @@
 version: "3.9"
 services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
   mysql:
     image: mysql
     ports:
@@ -12,8 +26,6 @@ services:
       retries: 10
   mongo:
     image: mongo
-    ports:
-      - "8081:8081"
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
       interval: 10s
@@ -31,9 +43,11 @@ services:
       retries: 3
   service-gateway:
     build: service-gateway
+    container_name: service-gateway
     ports:
       - "8080:80"
   service-authorization:
+    container_name: service-authorization
     depends_on:
       mysql:
         condition: service_healthy
@@ -41,6 +55,7 @@ services:
         condition: service_healthy
     build: service-authorization
   service-candidate:
+    container_name: service-candidate
     depends_on:
       mysql:
         condition: service_healthy
@@ -48,6 +63,7 @@ services:
         condition: service_healthy
     build: service-candidate
   service-party:
+    container_name: service-party
     depends_on:
       mysql:
         condition: service_healthy
@@ -55,6 +71,7 @@ services:
         condition: service_healthy
     build: service-party
   service-user:
+    container_name: service-user
     depends_on:
       mongo:
         condition: service_healthy
@@ -62,6 +79,7 @@ services:
         condition: service_healthy
     build: service-user
   service-voting-form:
+    container_name: service-voting-form
     depends_on:
       mysql:
         condition: service_healthy

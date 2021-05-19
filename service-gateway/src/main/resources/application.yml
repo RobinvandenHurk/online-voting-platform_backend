@@ -22,3 +22,8 @@ services:
   authorization:
     host: service-authorization
     port: 80
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus

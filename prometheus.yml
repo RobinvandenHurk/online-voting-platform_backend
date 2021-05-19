@@ -1,0 +1,12 @@
+scrape_configs:
+- job_name: Voting services
+  scrape_interval: 5s
+  metrics_path: /actuator/prometheus
+  static_configs:
+  - targets:
+    - service-authorization:80
+    - service-candidate:80
+    - service-gateway:80
+    - service-party:80
+    - service-user:80
+    - service-voting-form:80

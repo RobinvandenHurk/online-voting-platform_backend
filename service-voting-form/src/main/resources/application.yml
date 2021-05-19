@@ -18,3 +18,8 @@ spring:
     exchange: user.exchange
     queue: user.queue
     routingkey: user.routingkey
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
