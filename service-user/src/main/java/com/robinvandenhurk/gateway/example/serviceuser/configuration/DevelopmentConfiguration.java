@@ -21,6 +21,7 @@ public class DevelopmentConfiguration {
     public CommandLineRunner demo(UserRepository userRepository) {
         if (!userRepository.existsById(1L)) {
             User user = new User();
+            user.setId(1L);
             user.setFirstName("Robin");
             user.setLastName("Hood");
             user.setEmail("robin@robinvandenhurk.com");
